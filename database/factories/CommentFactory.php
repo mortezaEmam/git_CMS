@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,8 @@ class CommentFactory extends Factory
     {
         return [
             'body'=>$this->faker->text,
+            'commentable_id'=>Post::factory(),
+            'commentable_type'=>Post::class,
         ];
     }
 }
