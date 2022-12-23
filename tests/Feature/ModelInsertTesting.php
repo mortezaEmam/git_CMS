@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 trait ModelInsertTesting
 {
     use RefreshDatabase;
-    public function test_Insert_Data_to_Post()
+    public function test_Insert_Data_tables()
     {
         $model = $this->Tmodel();
         $table = $model->getTable();
