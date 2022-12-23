@@ -40,7 +40,7 @@ class PostTest extends TestCase
         $this->assertTrue($post->tags->first() instanceof Tag);
 
     }
-    public function test_post_relationship_with_comment()
+    public function test_post_relationship_with_comments()
     {
         $count = rand(1,10);
         $post = Post::factory()->hasComments($count)->create();

@@ -18,4 +18,13 @@ class CommetTest extends TestCase
     {
         return new Comment();
     }
+
+    public function test_comments_relationship_with_post()
+    {
+        $comment = Comment::factory()
+            ->hasCommentable(Post::factory())
+            ->create();
+        $this->assertTrue(isset($comment->commentable->id));
+        $this->assertTrue($comment->commentable instanceof Post);
+    }
 }
