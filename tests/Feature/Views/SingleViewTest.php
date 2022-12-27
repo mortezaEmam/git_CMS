@@ -18,8 +18,6 @@ class SingleViewTest extends TestCase
      */
     public function test_Single_View_Rendered_When_User_Logged_In()
     {
-//        $this->withoutExceptionHandling();
-
         $user = User::factory()->create();
         $post = Post::factory()->create();
         $comments = [];
@@ -34,5 +32,21 @@ class SingleViewTest extends TestCase
         $dom = new \DOMXPath($dom);
         $action = route('single.comments',$post->id);
         $this->assertCount(1,$dom->query("//form[@method='post'][@action='$action']/textarea[@name='text']"));
+    }
+    public function test_Single_View_Rendered_When_User_Not_Logged()
+    {
+        $post = Post::factory()->create();
+        $comments = [];
+        $view = (string)$this
+            -> view('single', compact('post', 'comments'));
+
+
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $internalErrors = libxml_use_internal_errors(true);
+        $dom->loadHTML($view);
+        libxml_use_internal_errors($internalErrors);
+        $dom = new \DOMXPath($dom);
+        $action = route('single.comments',$post->id);
+        $this->assertCount(0,$dom->query("//form[@method='post'][@action='$action']/textarea[@name='text']"));
     }
 }
