@@ -21,11 +21,16 @@
         </style>
     </head>
     <body class="antialiased">
-      <label>{{$post->title}}</label>
+      <h1>{{$post->title}}</h1>
      <ul>
          @foreach($comments as $comment)
              <li>{{$comment->body}}</li>
          @endforeach
      </ul>
+    <div>
+        <form action="{{route('single.comments',['post' => $post->id])}}" method="post">
+            <textarea name="text"></textarea>
+        </form>
+    </div>
     </body>
 </html>
