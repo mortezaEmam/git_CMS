@@ -47,4 +47,22 @@ class SingleControllerTest extends TestCase
         $this->assertDatabaseHas('comments', $data);
     }
 
+    public function test_Comment_Method_When_User_Not_Logged_In()
+    {
+        $post = Post::factory()->create();
+
+        $data = Comment::factory()->state([
+            'commentable_id' => $post->id,
+        ])->make()->toArray();
+
+        unset($data['user_id']);
+
+        $response = $this
+            ->post(route('single.comments', $post->id),
+                ['body' => $data['body']]);
+        $response->assertRedirect(route('login'));
+        $this->assertDatabaseMissing('comments', $data);
+    }
+
+
 }
