@@ -23,6 +23,8 @@ class SingleController extends Controller
                 'user_id' => Auth::id(),
                 'body' =>$request->body,
             ]);
-        return redirect(route('single',['post' =>$post->id]));
+        return response()->json([
+            'created' => true,
+        ]);
     }
 }
