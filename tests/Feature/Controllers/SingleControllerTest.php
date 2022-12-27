@@ -62,9 +62,10 @@ class SingleControllerTest extends TestCase
         unset($data['user_id']);
 
         $response = $this
-            ->post(route('single.comments', $post->id),
+            ->withHeader('HTTP_X-Requested-with' , 'XMLHttpRequest')
+            ->postJson(route('single.comments', $post->id),
                 ['body' => $data['body']]);
-        $response->assertRedirect(route('login'));
+        $response->assertUnauthorized();
         $this->assertDatabaseMissing('comments', $data);
     }
 
