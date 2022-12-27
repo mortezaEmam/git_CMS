@@ -27,10 +27,12 @@
              <li>{{$comment->body}}</li>
          @endforeach
      </ul>
+      @auth()
     <div>
         <form action="{{route('single.comments',['post' => $post->id])}}" method="post">
             <textarea name="text"></textarea>
         </form>
     </div>
+      @endauth
     </body>
 </html>
