@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Post;
-use App\Models\User;
+use DragonCode\Support\Concerns\Validation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class SingleController extends Controller
 {
@@ -18,6 +18,10 @@ class SingleController extends Controller
 
     public function comment(Request $request, Post $post)
     {
+        $request->validate([
+            'body' => 'required',
+        ]);
+
         $post->comments()
             ->create([
                 'user_id' => Auth::id(),
@@ -27,4 +31,5 @@ class SingleController extends Controller
             'created' => true,
         ]);
     }
+
 }

@@ -29,7 +29,7 @@ class SingleControllerTest extends TestCase
 
     public function test_Comment_Method_When_User_Logged_In()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
@@ -67,6 +67,20 @@ class SingleControllerTest extends TestCase
                 ['body' => $data['body']]);
         $response->assertUnauthorized();
         $this->assertDatabaseMissing('comments', $data);
+    }
+
+    public function test_Comment_Method_Validate_Required_Data ()
+    {
+        $post = Post::factory()->create();
+        $response = $this
+            ->actingAs(User::factory()->create())
+            ->withHeader('HTTP_X-Requested-with' , 'XMLHttpRequest')
+            ->postJson(route('single.comments', $post->id),
+                ['body' => '']);
+        $response->assertJsonValidationErrors([
+            'body',
+        ]);
+
     }
 
 
