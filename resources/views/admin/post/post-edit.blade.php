@@ -10,18 +10,20 @@
 <body>
 <form action="" method="post" enctype="multipart/form-data">
     <label>دسته بندی پست خود را انتخاب نمایید</label>
-        @foreach($categories as $category)
-            <select name="category">
-                <option value="{{$category->id}}">
-                    {{$category->title}}
-                </option>
-            </select>
-        @endforeach
+    @foreach($categories as $category)
+        <select name="category">
+            <option value="{{$category->id}}">
+                {{$category->title}}
+            </option>
+        </select>
+    @endforeach
+
     <label> عنوان پست :</label>
-    <input type="text" name="title" value="{{old('title')}}}" required>
+    <input type="text" name="title" value="{{old('title',$post->title)}}}" required>
 
     <label> محتوای پست :</label>
-    <textarea name="content">{{old('content')}}</textarea>
+    <textarea name="content">{{old('content',$post->content)}}</textarea>
+    <img src="{{$post->pic}}">
     <label>تصویر پست را انتخاب نمایید:</label>
     <input type="file" name="pic">
     <label>تگ مورد نظر پست خود را انتخاب نمایید</label>

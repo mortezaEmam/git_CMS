@@ -44,4 +44,23 @@ class PostControllerTest extends TestCase
                 'categories' => Category::query()->latest(),
             ]);
     }
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_Edit_Method()
+    {
+        Tag::factory()->count(15)->create();
+        Category::factory()->count(10)->create();
+        $post = Post::factory()->create();
+        $this->get(route('post.edit',$post->id))
+            ->assertOk()
+            ->assertViewIs('admin.post.post-edit')
+            ->assertViewHasAll([
+                'post' => $post,
+                'tags' => Tag::query()->latest(),
+                'categories' => Category::query()->latest(),
+            ]);
+    }
 }

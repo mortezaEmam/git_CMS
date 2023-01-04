@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
@@ -29,13 +31,13 @@ class PostController extends Controller
     {
         $tags = Tag::query()->latest();
         $categories = Category::query()->latest();
-        return view('admin.post.post-create',compact('tags','categories'));
+        return view('admin.post.post-create', compact('tags', 'categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -47,22 +49,28 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return View
      */
-    public function edit($id)
+    public function edit(Post $post): View
     {
-        //
+        $data = [
+            'post' => $post,
+            'tags' => Tag::query()->latest(),
+            'categories' => Category::query()->latest(),
+        ];
+
+        return view('admin.post.post-edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post): Response
     {
         //
     }
@@ -70,7 +78,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
