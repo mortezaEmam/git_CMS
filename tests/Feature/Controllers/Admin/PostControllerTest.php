@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Admin;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,10 +22,13 @@ class PostControllerTest extends TestCase
     public function test_Index_Method()
     {
         Post::factory()->count(100)->create();
-        $this->get(route('post.index'))
+        $this
+            ->actingAs(User::factory()->admin()->create())
+            ->get(route('post.index'))
             ->assertOk()
             ->assertViewIs('admin.post.post-index')
             ->assertViewHas('posts', Post::query()->latest()->paginate(15));
+        $this->assertEquals(request()->route()->middleware(),['web','admin']);
     }
 
     /**
@@ -36,13 +40,16 @@ class PostControllerTest extends TestCase
     {
         Tag::factory()->count(15)->create();
         Category::factory()->count(10)->create();
-        $this->get(route('post.create'))
+        $this
+            ->actingAs(User::factory()->admin()->create())
+            ->get(route('post.create'))
             ->assertOk()
             ->assertViewIs('admin.post.post-create')
             ->assertViewHasAll([
                 'tags' => Tag::query()->latest(),
                 'categories' => Category::query()->latest(),
             ]);
+        $this->assertEquals(request()->route()->middleware(),['web','admin']);
     }
     /**
      * A basic feature test example.
@@ -54,7 +61,9 @@ class PostControllerTest extends TestCase
         Tag::factory()->count(15)->create();
         Category::factory()->count(10)->create();
         $post = Post::factory()->create();
-        $this->get(route('post.edit',$post->id))
+        $this
+            ->actingAs(User::factory()->admin()->create())
+            ->get(route('post.edit',$post->id))
             ->assertOk()
             ->assertViewIs('admin.post.post-edit')
             ->assertViewHasAll([
@@ -62,5 +71,6 @@ class PostControllerTest extends TestCase
                 'tags' => Tag::query()->latest(),
                 'categories' => Category::query()->latest(),
             ]);
+        $this->assertEquals(request()->route()->middleware(),['web','admin']);
     }
 }
